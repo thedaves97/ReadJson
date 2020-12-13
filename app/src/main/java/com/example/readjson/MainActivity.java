@@ -33,19 +33,53 @@ public class MainActivity extends AppCompatActivity
         String marker_array = "{\n" +
                 "  \"markers\": [\n" +
                 "    {\n" +
-                "      \"name\": \"Rixos The Palm Dubai\",\n" +
-                "      \"lat\": 25.1212,\n" +
-                "      \"lon\": 55.1535\n" +
+                "      \"name\": \"Jumping Jester\",\n" +
+                "      \"type\": \"Pub\",\n" +
+                "      \"address\": \"Via Roma, 102\",\n" +
+                "      \"lat\": 45.0646803,\n" +
+                "      \"lon\": 7.6955659\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"name\": \"Shangri-La Hotel\",\n" +
-                "      \"lat\": 25.2084,\n" +
-                "      \"lon\": 55.2719\n" +
+                "      \"name\": \"Clorophilla\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Piazza Vittorio Veneto, 17\",\n" +
+                "      \"lat\": 45.0655545,\n" +
+                "      \"lon\": 7.6944488\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"name\": \"Grand Hyatt\",\n" +
-                "      \"lat\": 25.2285,\n" +
-                "      \"lon\": 55.3273\n" +
+                "      \"name\": \"La Rhumerie 18\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Via Maria Vittoria, 49\",\n" +
+                "      \"lat\": 45.0643651,\n" +
+                "      \"lon\": 7.6943166\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"L\\\\'alchimista\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Via delle Rosine, 10\",\n" +
+                "      \"lat\": 45.0650854,\n" +
+                "      \"lon\": 7.6891726\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"Soho.23\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Piazza Vittorio Veneto, 23F\",\n" +
+                "      \"lat\": 45.0643833,\n" +
+                "      \"lon\": 7.6948529\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"La Drogheria\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Piazza Vittorio Veneto, 18/D\",\n" +
+                "      \"lat\": 45.0642776,\n" +
+                "      \"lon\": 7.6930938\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"Al Bona\",\n" +
+                "      \"type\": \"Cocktail Bar\",\n" +
+                "      \"address\": \"Via Alfonso Bonafus, 2\",\n" +
+                "      \"lat\": 45.06377,\n" +
+                "      \"lon\": 7.6926851\n" +
                 "    }\n" +
                 "  ]\n" +
                 "}\n";
@@ -58,9 +92,12 @@ public class MainActivity extends AppCompatActivity
             {
                 JSONObject obj = jArray.getJSONObject(i);
                 String name = obj.getString("name");
+                String type = obj.getString("type");
+                String add = obj.getString("address");
                 double lat = obj.getDouble("lat");
                 double lon = obj.getDouble("lon");
-                arrayList.add("Nome " + name + "\nLat " + lat + "\nLon " + lon);
+
+                arrayList.add("Nome " + name + "\nTipologia "+ type + "\nIndirizzo "+ add + "\nLat " + lat + "\nLon " + lon);
 
             }
         } catch (JSONException e) {
