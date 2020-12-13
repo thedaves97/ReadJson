@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -25,57 +26,84 @@ public class MainActivity extends AppCompatActivity
         final String type = "type";
         final String address = "address";
 
-
+        //SE SI TROVA [ ALLORA SIGNIFICA CHE STA INIZIANDO UN ARRAY
         String s = "{\n" +
-                "  \"type\": \"FeatureCollection\",\n" +
-                "  \"features\": [\n" +
-                "    {\"type\":\"Feature\", \"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6955659, 45.0646803]}, \"properties\":{\"name\":\"Jumping Jester\",\"type\":\"pub\",\"address\": \"Via Roma, 102\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6944488, 45.0655545]}, \"properties\":{\"name\":\"Clorophilla\", \"type\":\"Cocktail Bar\", \"address\": \"Piazza Vittorio Veneto, 17\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.659841, 45.071133]}, \"properties\":{\"name\":\"Irish Pub\", \"type\":\"Pub\", \"address\": \"Viale Nizza, 38\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6943166, 45.0643651]}, \"properties\":{\"name\":\"La Rhumerie 18\", \"type\":\"Cocktail Bar\", \"address\": \"Via Maria Vittoria, 49\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6891726, 45.0650854]}, \"properties\":{\"name\":\"L alchimista\", \"type\":\"Cocktail Bar\", \"address\": \"Via delle Rosine, 10\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6948529, 45.0643833]}, \"properties\":{\"name\":\"Soho.23\", \"type\":\"Cocktail Bar\", \"address\": \"Piazza Vittorio Veneto, 23F\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6930938, 45.0642776 ]}, \"properties\":{\"name\":\"La Drogheria\", \"type\":\"Cocktail Bar\", \"address\": \"Piazza Vittorio Veneto, 18/D\", \"city\":\"Torino\"}},\n" +
-                "    {\"type\":\"Feature\",\"geometry\":{ \"type\":\"Point\", \"coordinates\":[7.6926851, 45.06377]}, \"properties\":{\"name\":\"Al Bona\", \"type\":\"Cocktail Bar\", \"address\": \"Via Alfonso Bonafus, 2\", \"city\":\"Torino\"}}\n" +
-                "      ]\n" +
-                "}";
+                "  \"markers\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Rixos The Palm Dubai\",\n" +
+                "      \"position\": [25.1212, 55.1535],\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"Shangri-La Hotel\",\n" +
+                "      \"location\": [25.2084, 55.2719]\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"Grand Hyatt\",\n" +
+                "      \"location\": [25.2285, 55.3273]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}\n";
 
-        JSONParser jParser = new JSONParser();
 
-        JSONArray locali = null;
-
-        JSONObject json = null;
-        StringBuilder str = new StringBuilder();
-
+        //CREAZIONE JSON OBJ
         try {
-            json = jParser.getJSON(s);
+            JSONObject json = new JSONObject(s);
+
+            JSONArray marker = json.getJSONArray("markers");
+            for (int i = 0; i < marker.length(); i++)
+            {
+                String n = marker.getJSONObject(i).getString("name");
+                //System.out.println(n);
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        try
-        {
-            // Getting Array of Contacts
-            locali = json.getJSONArray(type);
-
-            // looping through All Contacts
-            for (int i = 0; i < locali.length(); i++) {
-                JSONObject c = locali.getJSONObject(i);
-
-                // Storing each json item in variable
-                String coordinates = c.getString(coor);
-                String nome = c.getString(name);
-                String indirizzo = c.getString(address);
-                str.append(nome);
-
-            }       //FINE CICLO FOR
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }   //FINE CATCH
-
-
-
     }   //FINE onCreate
+
+    public void loadMarker(View view)
+    {
+        Resources res = getResources();
+        InputStream is = res.openRawResource(R.raw.marker);
+        Scanner scanner = new Scanner(is);
+        StringBuilder builder = new StringBuilder();
+        while (scanner.hasNextLine())
+        {
+            builder.append(scanner.nextLine());
+        }
+        parseJson(builder.toString());
+
+    }
+
+    private void parseJson(String s)
+    {
+        TextView txt = (TextView) findViewById(R.id.text_display);
+        StringBuilder builder = new StringBuilder();
+        try {
+            JSONObject root = new JSONObject(s);
+            JSONArray mark = root.getJSONArray("markers");
+
+            //builder.append("Name: ").append(mark.getString(0)).append("\n");
+            //builder.append("Location: ").append(mark.getDouble(1)).append("\n");
+            JSONArray coordinate = mark.getJSONArray(1);
+
+            for(int i = 0; i<coordinate.length();i++)
+            {
+                JSONObject c = coordinate.getJSONObject(i);
+                builder.append(c.getString("name")).append("\n");
+                JSONArray latLon = new JSONArray(1);
+                for(int j=0;j<latLon.length();j++)
+                {
+                    builder.append(latLon.getDouble(0)).append(" ").append(latLon.getDouble(1)).append("\n");
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        txt.setText(builder.toString());
+    }
 
 }       //FINE MAIN ACTIVITY
