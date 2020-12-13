@@ -9,8 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,62 +29,33 @@ public class MainActivity extends AppCompatActivity
         //INIZIALIZZO ARRAY JSON
         //SE SI TROVA [ ALLORA SIGNIFICA CHE STA INIZIANDO UN ARRAY
 
-        String marker_array = "{\n" +
-                "  \"markers\": [\n" +
-                "    {\n" +
-                "      \"name\": \"Jumping Jester\",\n" +
-                "      \"type\": \"Pub\",\n" +
-                "      \"address\": \"Via Roma, 102\",\n" +
-                "      \"lat\": 45.0646803,\n" +
-                "      \"lon\": 7.6955659\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"Clorophilla\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Piazza Vittorio Veneto, 17\",\n" +
-                "      \"lat\": 45.0655545,\n" +
-                "      \"lon\": 7.6944488\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"La Rhumerie 18\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Via Maria Vittoria, 49\",\n" +
-                "      \"lat\": 45.0643651,\n" +
-                "      \"lon\": 7.6943166\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"L\\\\'alchimista\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Via delle Rosine, 10\",\n" +
-                "      \"lat\": 45.0650854,\n" +
-                "      \"lon\": 7.6891726\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"Soho.23\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Piazza Vittorio Veneto, 23F\",\n" +
-                "      \"lat\": 45.0643833,\n" +
-                "      \"lon\": 7.6948529\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"La Drogheria\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Piazza Vittorio Veneto, 18/D\",\n" +
-                "      \"lat\": 45.0642776,\n" +
-                "      \"lon\": 7.6930938\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"name\": \"Al Bona\",\n" +
-                "      \"type\": \"Cocktail Bar\",\n" +
-                "      \"address\": \"Via Alfonso Bonafus, 2\",\n" +
-                "      \"lat\": 45.06377,\n" +
-                "      \"lon\": 7.6926851\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}\n";
+        InputStream is = getResources().openRawResource(R.raw.marker);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+            int n;
+            while((n = reader.read(buffer)) !=-1)
+            {
+                writer.write(buffer, 0, n);
+            } //FINE WHILE
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String marker_array = writer.toString();
+
 
         //FETCH JSON
         try {
+
             JSONObject json = new JSONObject(marker_array);
             JSONArray jArray =  json.getJSONArray("markers");
             for (int i = 0;i<jArray.length();i++)
