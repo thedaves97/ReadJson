@@ -66,8 +66,15 @@ public class MainActivity extends AppCompatActivity
                 String add = obj.getString("address");
                 double lat = obj.getDouble("lat");
                 double lon = obj.getDouble("lon");
+                Marker m = new Marker();
+                m.setName(name);
+                m.setType(type);
+                m.setAddress(add);
+                m.setLat(lat);
+                m.setLon(lon);
 
-                arrayList.add("Nome " + name + "\nTipologia "+ type + "\nIndirizzo "+ add + "\nLat " + lat + "\nLon " + lon);
+                arrayList.add("Nome " + m.getName() + "\nTipologia "+ m.getType() + "\nIndirizzo "+ m.getAddress() +
+                        "\nLat " + m.getLat() + "\nLon " + m.getLon());
 
             }
         } catch (JSONException e) {
